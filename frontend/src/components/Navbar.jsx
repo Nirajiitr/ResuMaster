@@ -2,14 +2,28 @@ import React from 'react'
 import logo from "../assets/logo.svg";
 import { GrDocumentDownload } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
-const Navbar = () => {
+import {Link} from "react-router-dom"
+import { CiLogin } from "react-icons/ci";
+import { GoSignIn } from "react-icons/go";
+const Navbar = ({location, signupModel,showLoginModel}) => {
   return (
      <nav className='w-full h-16 bg-blue-200  '>
         <div className='flex justify-between items-center p-2'>
             <img className='size-12 object-cover' src={logo} alt="brand logo" />
             <div className='flex items-center gap-7'>
-            <a className='flex items-center border-2 border-black rounded-lg p-1' href='./resume' > <GrDocumentDownload />My Resume</a>
-             <CgProfile size="35px"/>
+              {
+                location ==="AuthPage" ? <>
+                   <button onClick={()=>signupModel(true)} className='flex items-center border-2 border-slate-700 px-5 py-2 rounded-xl hover:text-white hover:bg-black  '> <GoSignIn size="20px" />signup</button>
+                  <button onClick={()=>showLoginModel(true)} className='flex items-center border-2 border-slate-700 px-5 py-2 rounded-xl hover:text-white hover:bg-black  '>login <CiLogin size="20px" /></button>
+                 
+                </>   
+                :
+                <>
+                <Link className='flex items-center border-2 border-black rounded-lg p-1' to={'./resume'} > <GrDocumentDownload />My Resume</Link>
+                <CgProfile size="35px"/>
+                </>
+              }
+          
              </div>
         </div>
         

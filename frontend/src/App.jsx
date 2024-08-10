@@ -1,10 +1,16 @@
 import React from 'react'
- import logo from "./assets/react.svg"
+
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import DefaultPage from './pages/DefaultPage'
+import HomePage from './pages/HomePage'
 const App = () => {
   return (
-    <div>
-      <img src={logo} alt="" />
-    </div>
+    <BrowserRouter>
+     <Routes>
+      <Route path='/' element={<DefaultPage />} />
+      <Route path='/home' element={<HomePage />} />
+     </Routes>
+    </BrowserRouter>
   )
 }
 
