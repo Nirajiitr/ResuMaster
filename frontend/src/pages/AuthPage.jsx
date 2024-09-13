@@ -15,7 +15,7 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
      
        const endPoint = login? "login" : "register";
     try {
-       const res = await axios.post(`https://resumaster-backind.onrender.com/auth/${endPoint}` , userData, {
+       const res = await axios.post(`http://localhost:8888/auth/${endPoint}` , userData, {
         headers: {
           "Content-Type" : "application/json"
         },
