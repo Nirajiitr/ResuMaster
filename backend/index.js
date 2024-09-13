@@ -1,7 +1,6 @@
 import express from "express"
 import cors from "cors"
 import authRoute from "./routes/authRoute.js"
-import path from "path"
 import "dotenv/config"
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser"
@@ -34,10 +33,7 @@ app.use(cors(corsOption));
 //routes
  app.use("/auth", authRoute)
  
- app.use(express.static(path.join(_dirname, "/frontend/dist")));
- app.get("*", (_, res)=>{
-   res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"))
- })
+ 
 
 //server
 app.listen(port, ()=>{
