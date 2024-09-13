@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser"
 const app = express();
 const port = process.env.PORT;
 
-const _dirname = path.resolve();
+
 
 //database
  const DB_URL = process.env.DB_URL;
@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser())
 const corsOption ={
-    origin: "http://localhost:5173",
+    origin: "https://resumaster.onrender.com",
     credentials : true,
 }
 app.use(cors(corsOption));
