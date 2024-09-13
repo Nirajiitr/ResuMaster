@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
 import brandLogo from "../assets/logo.svg";
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
+
 import toast from "react-hot-toast"
 import axios from "axios"
+import AuthenticationProvider from "../components/AuthenticationProvider";
 const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
   const [userData, setUserData] = useState({firstname: "", lastname: "", email: "", password:"", confirmPass: "", gender:""});
    const navigate = useNavigate()
@@ -174,19 +175,7 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
           <hr className="w-[50%]" />
         </div>
         <div className="flex flex-col items-center justify-center gap-2 p-5">
-          <Link
-            className="flex items-center gap-2 border-blue-100 rounded-xl border-2 px-40 py-2 hover:bg-black hover:text-white"
-            to=""
-          >
-            <FcGoogle /> {login ? "login with Google" : "sign up with Google"}{" "}
-          </Link>
-          <Link
-            className="flex items-center gap-2 border-blue-100 rounded-xl border-2 px-40 py-2 hover:bg-black hover:text-white"
-            to=""
-          >
-            <FaGithub />
-            {login ? "login with Github" : "sign up with Github"}{" "}
-          </Link>
+           <AuthenticationProvider login ={login}  />
         </div>
       </div>
     </div>

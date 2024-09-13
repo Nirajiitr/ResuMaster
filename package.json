@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon backend/index.js",
+    "build":"npm install && npm install --prefix frontend && npm run dist --prefix frontend",
+    "start": "nodemon backend/index.js"
   },
   "author": "Niraj kumar",
   "license": "ISC",
