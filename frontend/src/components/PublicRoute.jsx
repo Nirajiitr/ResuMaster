@@ -1,13 +1,40 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import toast from "react-hot-toast";
+import { Navigate } from "react-router-dom";
+import axios from "axios";
 
-const PublicRoute = ({children}) => {
-   
-    const user = JSON.parse(localStorage.getItem("user"))
-    if(user){
-        return  <Navigate to="/home" replace />
+const PublicRoute = ({ children }) => {
+  const [isValid, setIsValid] = useState(false);
+  const [cookies] = useCookies(["Token"]);
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    const validateToken = async () => {
+      if (user && user?._id) {
+        try {
+          const res = await axios.get("http://localhost:8888/auth/verify", {
+            
+            withCredentials: true,
+          });
+          setIsValid(true);
+        } catch (error) {
+          toast.error(error.response?.data?.message || "Authentication failed");
+          setIsValid(false);
+          localStorage.setItem("user", null);
+        }
+      } else {
+        setIsValid(false);
       }
-  return  children;
-}
+    };
 
-export default PublicRoute
+    validateToken();
+  }, [cookies, user]);
+
+  if(isValid){
+   return <Navigate to="/home" replace />
+  }   
+  return children;
+};
+
+export default PublicRoute;

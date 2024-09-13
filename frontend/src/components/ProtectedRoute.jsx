@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     const validateToken = async () => {
-      if (user) {
+      if (user && user?._id) {
         try {
           const res = await axios.get("http://localhost:8888/auth/verify", {
             withCredentials: true,
@@ -21,6 +21,7 @@ const ProtectedRoute = ({ children }) => {
         } catch (error) {
           toast.error(error.response?.data?.message || "Authentication failed");
           setIsValid(false);
+          localStorage.setItem("user", null);
         }
       } else {
         setIsValid(false);
