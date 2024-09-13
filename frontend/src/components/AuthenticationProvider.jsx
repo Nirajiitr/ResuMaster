@@ -20,8 +20,8 @@ const AuthenticationProvider = ({ login }) => {
         await signInWithPopup(auth, googleAuthProvider)
           .then((result) => {
            
-            localStorage.setItem("user",JSON.stringify({Fullname : result.user.displayName, email : result.user.email, profileP: result.user.photoURL}));
-
+            localStorage.setItem("user",JSON.stringify({Fullname : result.user.displayName, email : result.user.email,uid: result.user.uid, profile: result.user.photoURL}));
+            
             navigate("/home");
 
             toast.success(result.operationType);
@@ -34,10 +34,14 @@ const AuthenticationProvider = ({ login }) => {
       case "Github":
         await signInWithPopup(auth, githubAuthProvider)
           .then((result) => {
-            console.log(result);
+          
+            localStorage.setItem("user",JSON.stringify({Fullname : result.user.displayName, email : result.user.email,uid: result.user.uid, profile: result.user.photoURL}));
+            navigate("/home");
+            toast.success(result.operationType);
           })
           .catch((error) => {
-            console.log(error);
+            toast.error("sever error")
+            navigate("/")
           });
 
         break;

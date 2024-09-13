@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
     const validateToken = async () => {
       if (user && user?._id) {
         try {
-          const res = await axios.get("http://localhost:8888/auth/verify", {
+          const res = await axios.get("https://resumaster-backind.onrender.com/auth/verify", {
             withCredentials: true,
           });
           setIsValid(res.status === 200);
@@ -23,8 +23,11 @@ const ProtectedRoute = ({ children }) => {
           setIsValid(false);
           localStorage.setItem("user", null);
         }
-      } else {
-        setIsValid(false);
+      } else if(user?.uid){
+        setIsValid(true);
+      }
+      else{
+        setIsValid(false)
       }
     };
 
