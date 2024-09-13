@@ -1,8 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
 import brandLogo from "../assets/logo.svg";
-
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"
+import axios from "axios"
 const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
+  const [userData, setUserData] = useState({firstname: "", lastname: "", email: "", password:"", confirmPass: "", gender:""});
+   const navigate = useNavigate()
+   const handleSubmit = async (e)=>{
+    e.preventDefault();
+     
+       const endPoint = login? "login" : "register";
+    try {
+       const res = await axios.post(`http://localhost:8888/auth/${endPoint}` , userData, {
+        headers: {
+          "Content-Type" : "application/json"
+        },
+        withCredentials : true
+       })
+       localStorage.setItem("user",JSON.stringify(res.data.newUser))
+       
+       navigate("/home")
+
+       toast.success(res.data.message)
+      
+    } catch (error) {
+         toast.error(error.response.data.message)
+      navigate("/")
+    }
+   
+    setUserData({firstname: "", lastname: "", email: "", password:"", confirmPass: "", gender:""})
+   }
+  
   return (
     <div className="fixed inset-0 bg-slate-700 bg-opacity-80 flex justify-center items-center">
       <div className="bg-blue-300 text-black w-[600px] h-[600px] rounded-xl">
@@ -28,69 +59,135 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
             </>
           )}
         </div>
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-rows-2 grid-cols-2 gap-5 p-10">
-            <input
-              className="rounded-3xl focus:outline-none p-3"
-              type="text"
-              placeholder="Enter your firstname "
-            />
-            <input
-              className="rounded-3xl focus:outline-none p-3"
-              type="text"
-               placeholder="Enter your lastname "
-            />
+            {!login && (
+              <>
+                <input
+                  className="rounded-3xl focus:outline-none p-3"
+                  type="text"
+                  placeholder="Enter your firstname "
+                  name="firstname"
+                  required
+                  value={userData.firstname}
+                  onChange={(e)=>setUserData({...userData, firstname: e.target.value})}
+                />
+                <input
+                  className="rounded-3xl focus:outline-none p-3"
+                  type="text"
+                  placeholder="Enter your lastname "
+                  name="lastname"
+                  required
+                  value={userData.lastname}
+                  onChange={(e)=>setUserData({...userData, lastname: e.target.value})}
+                />
+              </>
+            )}
+
             <input
               className="rounded-3xl focus:outline-none p-3"
               type="email"
-               placeholder="Enter your email "
+              placeholder="Enter your email "
+              name="email"
+              required
+              value={userData.email}
+              onChange={(e)=>setUserData({...userData, email: e.target.value})}
             />
-            
-            <input
-              className="rounded-3xl focus:outline-none p-3"
-              type="password"
-               placeholder="Enter your password "
-            />
-            
-            <input
-              className="rounded-3xl focus:outline-none p-3"
-              type="password"
-               placeholder="Enter your confirm password "
-            />
-            
-              <fieldset className="border-black border-2 flex justify-center rounded-lg  gap-3 ">
-                <legend className="text-center ">Select gender</legend>
 
-                <label className="flex items-center gap-1 cursor-pointer" htmlFor="male">
-                 
-                  male
-                  <input type="radio" id="male" name="gender" value="male" />
-                </label>
-                <label className="flex items-center gap-1 cursor-pointer" htmlFor="female">
-                 
-                  female
-                  <input
-                    type="radio"
-                    id="female"
-                    name="gender"
-                    value="female"
-                  />
-                </label>
-                <label className="flex items-center gap-1 cursor-pointer" htmlFor="other">
-                 
-                  other
-                  <input type="radio" id="other" name="gender" value="other" />
-                </label>
-              </fieldset>
-            
+            <input
+              className="rounded-3xl focus:outline-none p-3"
+              type="password"
+              placeholder="Enter your password "
+              name="password"
+              required
+              value={userData.password}
+              onChange={(e)=>setUserData({...userData, password: e.target.value})}
+            />
+            {!login && (
+              <>
+                <input
+                  className="rounded-3xl focus:outline-none p-3"
+                  type="password"
+                  placeholder="Enter your confirm password "
+                  name="confirmPass"
+                  required
+                  value={userData.confirmPass}
+                  onChange={(e)=>setUserData({...userData, confirmPass: e.target.value})}
+                />
+
+                <fieldset className="border-blue-100 border-2 flex justify-center rounded-lg  gap-3 ">
+                  <legend className="text-center ">Select gender</legend>
+
+                  <label
+                    className="flex items-center gap-1 cursor-pointer"
+                    htmlFor="male"
+                  >
+                    male
+                    <input type="radio" id="male" name="gender" value="male"  checked={userData.gender==="male"}
+                     onChange={(e)=>setUserData({...userData, gender: e.target.value})}
+                  
+                    />
+                  </label>
+                  <label
+                    className="flex items-center gap-1 cursor-pointer"
+                    htmlFor="female"
+                  >
+                    female
+                    <input
+                      type="radio"
+                      id="female"
+                      name="gender"
+                      value="female"
+                      checked={userData.gender==="female"}
+                      onChange={(e)=>setUserData({...userData, gender: e.target.value})}
+                    />
+                  </label>
+                  <label
+                    className="flex items-center gap-1 cursor-pointer"
+                    htmlFor="other"
+                  >
+                    other
+                    <input
+                      type="radio"
+                      id="other"
+                      name="gender"
+                      value="other"
+                      checked={userData.gender==="other"}
+                      onChange={(e)=>setUserData({...userData, gender: e.target.value})}
+                    />
+                  </label>
+                </fieldset>
+              </>
+            )}
+
             <button
-              className=" justify-stretch border-2 text-2xl py-3 rounded-3xl border-black hover:bg-black hover:text-white col-span-2"
+              className=" justify-stretch border-2 text-2xl py-3 rounded-3xl border-blue-100 hover:bg-black hover:text-white col-span-2"
               type="submit"
             >
               submit
             </button>
           </div>
         </form>
+        <div className="flex w-full items-center">
+          <hr className="w-[50%]" />
+          or
+          <hr className="w-[50%]" />
+        </div>
+        <div className="flex flex-col items-center justify-center gap-2 p-5">
+          <Link
+            className="flex items-center gap-2 border-blue-100 rounded-xl border-2 px-40 py-2 hover:bg-black hover:text-white"
+            to=""
+          >
+            <FcGoogle /> {login ? "login with Google" : "sign up with Google"}{" "}
+          </Link>
+          <Link
+            className="flex items-center gap-2 border-blue-100 rounded-xl border-2 px-40 py-2 hover:bg-black hover:text-white"
+            to=""
+          >
+            <FaGithub />
+            {login ? "login with Github" : "sign up with Github"}{" "}
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ export const register = async (req, res) => {
       gender,
     });
     await newUser.save();
-    res.status(201).json(newUser);
+    res.status(201).json({ newUser, message: "account created successfully"});
   } catch (error) {
     res.status(501).json({ message: "server error", error: error });
   }
@@ -68,7 +68,7 @@ export const login = async (req, res) => {
         httpOnly: true,
         sameSite: "strict",
       })
-      .json(newUser);
+      .json({newUser,message: "logged in successfully"});
   } catch (error) {
     res.status(501).json({ message: "server error", error });
   }

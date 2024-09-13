@@ -7,4 +7,7 @@ const router = express.Router();
 
 router.post("/register", register)
 router.post("/login", login)
+router.get("/verify", isAuthenticated, (req, res) => {
+    res.status(200).json({ message: "Authenticated", userId: req.id });
+  });
 export default router

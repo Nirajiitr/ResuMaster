@@ -1,17 +1,34 @@
-import React from 'react'
+import React from "react";
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import DefaultPage from './pages/DefaultPage'
-import HomePage from './pages/HomePage'
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import DefaultPage from "./pages/DefaultPage";
+import HomePage from "./pages/HomePage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 const App = () => {
   return (
     <BrowserRouter>
-     <Routes>
-      <Route path='/' element={<DefaultPage />} />
-      <Route path='/home' element={<HomePage />} />
-     </Routes>
-    </BrowserRouter>
-  )
-}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PublicRoute>
+              <DefaultPage />
+            </PublicRoute>
+          }
+        />
 
-export default App
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;
