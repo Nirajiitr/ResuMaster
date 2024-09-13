@@ -23,8 +23,11 @@ const PublicRoute = ({ children }) => {
           setIsValid(false);
           localStorage.setItem("user", null);
         }
-      } else {
-        setIsValid(false);
+      } else if(user?.uid){
+        setIsValid(true);
+      }
+      else{
+        setIsValid(false)
       }
     };
 
