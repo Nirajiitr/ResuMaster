@@ -6,6 +6,7 @@ body{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 @layer utilities{
     @keyframes swipe {
@@ -48,6 +49,25 @@ body{
      cursor: pointer;
   }
    .profile-animation {
-
+     animation: moveLeft 300ms ease-in forwards;
+   }
+  @keyframes moveLeft{
+    0% { transform: translate(30%,-40%);}
+   
+    100% {transform:  translateX(0);} 
+    
+   }
+   .btn{
+    display: flex;
+    background: #000;
+    color:white;
+    justify-content: center;
+    align-items: center;
+   
+   }
+   .btn:hover{
+    scale: 1.1;
+    transition-duration: 1s;
+    background: #151516;
    }
 }

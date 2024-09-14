@@ -32,7 +32,7 @@ const AuthenticationProvider = ({ login }) => {
             toast.success(result.operationType);
           })
           .catch((error) => {
-            toast.error(error);
+            toast.error("something went wrong...");
             navigate("/");
           });
         break;
@@ -51,7 +51,7 @@ const AuthenticationProvider = ({ login }) => {
             toast.success(result.operationType);
           })
           .catch((error) => {
-            toast.error(error);
+            toast.error("something went wrong...");
             navigate("/");
           });
 

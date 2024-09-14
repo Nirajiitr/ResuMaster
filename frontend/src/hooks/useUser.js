@@ -10,7 +10,7 @@ const useUser = () => {
         const userDetail = await getUserData();
         return userDetail;
       } catch (error) {
-        if (!error.message.include("not authenticated")) {
+        if (!error.message.includes("not authenticated")) {
           toast.error("something went wrong...");
         }
       }
