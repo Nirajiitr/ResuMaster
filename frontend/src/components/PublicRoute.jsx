@@ -37,9 +37,7 @@ const PublicRoute = ({ children }) => {
     validateToken();
   }, [cookies.Token, user]);
 
-  if (isValid === null) {
-    return <Spinner />;
-  }
+  
   if (isLoading) {
     return <Spinner />;
   }
@@ -48,6 +46,7 @@ const PublicRoute = ({ children }) => {
     return <Navigate to="/home" replace />;
   }
   return children;
+  
 };
 
 export default PublicRoute;

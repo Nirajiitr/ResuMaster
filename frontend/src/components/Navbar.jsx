@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import logo from "../assets/logo.svg";
 import { GrDocumentDownload } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiLogin } from "react-icons/ci";
 import { GoSignIn } from "react-icons/go";
-import useUser from "../hooks/useUser";
+
 import { AiOutlineLogout } from "react-icons/ai";
 import { auth } from "../utils/firebase.confi";
 import { useQueryClient } from "react-query";
 
 const Navbar = ({ location, signupModel, showLoginModel }) => {
+  const navigate = useNavigate()
   const [Menu, setMenu] = useState(false)
   const queryClient = useQueryClient()
   const user = JSON.parse(localStorage.getItem("user"));
@@ -19,6 +20,7 @@ const Navbar = ({ location, signupModel, showLoginModel }) => {
     await auth.signOut().then(()=>{
       queryClient.setQueryData("user", null)
     })
+    navigate("/")
    }
   return (
     <nav className="w-full h-16 bg-blue-300 ">

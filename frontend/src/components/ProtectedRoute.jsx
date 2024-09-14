@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 import Spinner from "./Spinner";
 import useUser from "../hooks/useUser";
 const ProtectedRoute = ({ children }) => {
-  const [isValid, setIsValid] = useState(null);
+  const [isValid, setIsValid] = useState(false);
   const [cookies] = useCookies(["Token"]);
   const { data, isLoading, isError } = useUser();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -34,7 +34,7 @@ const ProtectedRoute = ({ children }) => {
     validateToken();
   }, [cookies.Token, user]);
 
-if (isValid === null) {
+  if (!isValid) {
     return <Spinner />;
   }
  if(isLoading){
