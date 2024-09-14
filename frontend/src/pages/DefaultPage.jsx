@@ -8,12 +8,16 @@ import AuthPage from "./AuthPage";
 
 const DefaultPage = () => {
   const resumeSample = [resumeSample1, resumeSample2, resumeSample3];
-  const [signupModel, setSignupModel] = useState(false)
-  const [loginModel, setLoginModel] = useState(false)
+  const [signupModel, setSignupModel] = useState(false);
+  const [loginModel, setLoginModel] = useState(false);
 
   return (
     <div className="flex flex-col h-screen bg-slate-500 relative overflow-y-auto no-scrollbar">
-      <Navbar location="AuthPage" signupModel = {setSignupModel} showLoginModel={setLoginModel}  />
+      <Navbar
+        location="AuthPage"
+        signupModel={setSignupModel}
+        showLoginModel={setLoginModel}
+      />
       <div className=" flex ">
         <div className="bg-gray-700 text-white w-[40%] hover:rounded-xl ">
           <div className="flex items-start gap-1 overflow-hidden  hover:scale-95 hover:rounded-xl transition-transform duration-100   w-full ">
@@ -45,20 +49,16 @@ const DefaultPage = () => {
                 <li>- Instant PDF download</li>
               </ul>
             </div>
-            <button onClick={()=>setSignupModel(true)} className="mt-20 ml-60 bg-green-500 p-5 px-10 rounded-lg hover:scale-105 transition-transform duration-500 hover:shadow-lg text-white text-xl font-mono">
+            <button
+              onClick={() => setSignupModel(true)}
+              className="mt-20 ml-60 bg-green-500 p-5 px-10 rounded-lg hover:scale-105 transition-transform duration-500 hover:shadow-lg text-white text-xl font-mono"
+            >
               get start
             </button>
           </div>
         </div>
-        {
-          signupModel &&
-          <AuthPage showSignupModel={setSignupModel} />
-        }
-        {
-          loginModel &&
-          <AuthPage showLoginModel={setLoginModel} login="true" />
-        }
-       
+        {signupModel && <AuthPage showSignupModel={setSignupModel} />}
+        {loginModel && <AuthPage showLoginModel={setLoginModel} login="true" />}
       </div>
 
       <Footer />
