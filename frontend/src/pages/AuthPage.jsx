@@ -9,6 +9,7 @@ import axios from "axios";
 import AuthenticationProvider from "../components/AuthenticationProvider";
 import useUser from "../hooks/useUser";
 import Spinner from "../components/Spinner";
+import { useQueryClient } from "react-query";
 const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
   const [userData, setUserData] = useState({
     firstname: "",
@@ -18,6 +19,7 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
     confirmPass: "",
     gender: "",
   });
+  const queryClient = useQueryClient()
   const [Loading, setLoading ] = useState(false)
   const navigate = useNavigate();
   const { data, isLoading } = useUser();
@@ -27,12 +29,10 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
       navigate("/", { replace: true });
     }
   }, [isLoading, data]);
-  if (isLoading) {
-    <Spinner />;
-  }
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     const endPoint = login ? "login" : "register";
     try {
       setLoading(true)
@@ -46,7 +46,7 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
           withCredentials: true,
         }
       );
-      localStorage.setItem("user", JSON.stringify(res.data.newUser));
+      queryClient.invalidateQueries("user");
       setLoading(false)
       toast.success(res.data.message);
       navigate("/home"); 
@@ -66,8 +66,8 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
     });
   };
 
-  if(Loading){
-    return <Spinner />
+  if (isLoading || Loading) {
+    return <Spinner />;
   }
   return (
     <div className="fixed inset-0 bg-slate-700 bg-opacity-80 flex justify-center items-center">

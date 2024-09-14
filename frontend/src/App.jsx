@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import { QueryClient, QueryClientProvider } from "react-query";
-
+import {ReactQueryDevtools} from "react-query/devtools"
 import Spinner from "./components/Spinner";
 const App = () => {
   const queryClient = new QueryClient();
@@ -36,6 +36,7 @@ const App = () => {
           </Routes>
         </BrowserRouter>
       </Suspense>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

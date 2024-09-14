@@ -9,18 +9,22 @@ import { GoSignIn } from "react-icons/go";
 import { AiOutlineLogout } from "react-icons/ai";
 import { auth } from "../utils/firebase.confi";
 import { useQueryClient } from "react-query";
+import useUser from "../hooks/useUser";
+import Spinner from "./Spinner";
 
 const Navbar = ({ location, signupModel, showLoginModel }) => {
   const navigate = useNavigate()
   const [Menu, setMenu] = useState(false)
   const queryClient = useQueryClient()
-  const user = JSON.parse(localStorage.getItem("user"));
+  const {data,isLoading} = useUser()
    const handleLogout = async()=>{
-     localStorage.removeItem("user")
     await auth.signOut().then(()=>{
       queryClient.setQueryData("user", null)
     })
     navigate("/")
+   }
+   if(isLoading){
+    return <Spinner />
    }
   return (
     <nav className="w-full h-16 bg-blue-300 ">
@@ -54,9 +58,9 @@ const Navbar = ({ location, signupModel, showLoginModel }) => {
                 <GrDocumentDownload />
                 My Resume
               </Link>
-              {user?.profile ? (
+              {data?.photoURL? (
                 <img
-                  src={user.profile}
+                  src={data?.photoURL}
                   className="size-9 profile-style rounded-full"
                    onClick={()=>setMenu(!Menu)}
                 />
@@ -68,9 +72,9 @@ const Navbar = ({ location, signupModel, showLoginModel }) => {
           {
             Menu &&  <div onMouseLeave={()=>setMenu(!Menu)} className=" overflow-x-hidden profile-animation absolute text-lg flex items-center flex-col gap-3 p-3 bg-blue-200 rounded-md text-black w-60 right-0 top-0 ">
             {
-             user && user?._id? <CgProfile  size="80px" /> :
+             data && data?._id? <CgProfile  size="80px" /> :
              <img
-             src={user?.profile}
+             src={data?.photoURL}
              className="size-20  rounded-full"
            />
             }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,48 +9,45 @@ import {
 } from "firebase/auth";
 import { auth } from "../utils/firebase.confi";
 import toast from "react-hot-toast";
+import Spinner from "./Spinner";
+import { setPersistence, browserSessionPersistence } from "firebase/auth";
 const AuthenticationProvider = ({ login }) => {
   const githubAuthProvider = new GithubAuthProvider();
   const googleAuthProvider = new GoogleAuthProvider();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
   const handleClick = async (provider) => {
+    
     switch (provider) {
       case "Google":
-        await signInWithPopup(auth, googleAuthProvider)
+        setLoading(true)
+        await setPersistence(auth, browserSessionPersistence).then(()=>{
+          return signInWithPopup(auth, googleAuthProvider)})
+         
           .then((result) => {
-            localStorage.setItem(
-              "user",
-              JSON.stringify({
-                Fullname: result.user.displayName,
-                email: result.user.email,
-                profile: result.user.photoURL,
-              })
-            );
-
+             
+              setLoading(false)
             navigate("/home");
 
             toast.success(result.operationType);
           })
           .catch((error) => {
+            setLoading(false)
             toast.error("something went wrong...");
             navigate("/");
           });
         break;
       case "Github":
-        await signInWithPopup(auth, githubAuthProvider)
+        setLoading(true)
+        await setPersistence(auth, browserSessionPersistence).then(()=>{
+          return signInWithPopup(auth, githubAuthProvider)})
           .then((result) => {
-            localStorage.setItem(
-              "user",
-              JSON.stringify({
-                Fullname: result.user.displayName,
-                email: result.user.email,
-                profile: result.user.photoURL,
-              })
-            );
+            setLoading(false)
             navigate("/home");
             toast.success(result.operationType);
           })
           .catch((error) => {
+            setLoading(false)
             toast.error("something went wrong...");
             navigate("/");
           });
@@ -58,6 +55,9 @@ const AuthenticationProvider = ({ login }) => {
         break;
     }
   };
+  if(loading){
+    return <Spinner />
+  }
   return (
     <>
       <Link
