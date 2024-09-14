@@ -32,7 +32,7 @@ const AuthenticationProvider = ({ login }) => {
             toast.success(result.operationType);
           })
           .catch((error) => {
-            toast.error("sever error");
+            toast.error(error);
             navigate("/");
           });
         break;
@@ -51,7 +51,7 @@ const AuthenticationProvider = ({ login }) => {
             toast.success(result.operationType);
           })
           .catch((error) => {
-            toast.error("sever error");
+            toast.error(error);
             navigate("/");
           });
 

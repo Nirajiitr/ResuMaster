@@ -8,7 +8,7 @@ import useUser from "../hooks/useUser";
 const ProtectedRoute = ({ children }) => {
   const [isValid, setIsValid] = useState(null);
   const [cookies] = useCookies(["Token"]);
-  const { data } = useUser();
+  const { data, isLoading, isError } = useUser();
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -34,10 +34,13 @@ const ProtectedRoute = ({ children }) => {
     validateToken();
   }, [cookies.Token, user]);
 
-  if (isValid === null) {
+if (isValid === null) {
     return <Spinner />;
   }
-
+ if(isLoading){
+  return <Spinner />;
+ }
+ if(isError) toast.error(isError)
   return isValid ? children : <Navigate to="/" replace />;
 };
 

@@ -18,6 +18,7 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
     confirmPass: "",
     gender: "",
   });
+  const [Loading, setLoading ] = useState(false)
   const navigate = useNavigate();
   const { data, isLoading } = useUser();
 
@@ -34,6 +35,7 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
 
     const endPoint = login ? "login" : "register";
     try {
+      setLoading(true)
       const res = await axios.post(
         `https://resumaster-backind.onrender.com/auth/${endPoint}`,
         userData,
@@ -45,11 +47,11 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
         }
       );
       localStorage.setItem("user", JSON.stringify(res.data.newUser));
-
-      navigate("/home");
-
+      setLoading(false)
       toast.success(res.data.message);
+      navigate("/home"); 
     } catch (error) {
+      setLoading(false)
       toast.error(error.response.data.message);
       navigate("/");
     }
@@ -64,6 +66,9 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
     });
   };
 
+  if(Loading){
+    return <Spinner />
+  }
   return (
     <div className="fixed inset-0 bg-slate-700 bg-opacity-80 flex justify-center items-center">
       <div className="bg-blue-300 text-black w-[600px] h-[600px] rounded-xl">

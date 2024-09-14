@@ -10,14 +10,17 @@ const PublicRoute = ({ children }) => {
   const [isValid, setIsValid] = useState(false);
   const [cookies] = useCookies(["Token"]);
   const user = JSON.parse(localStorage.getItem("user"));
-  const { data } = useUser();
+  const { data, isLoading, isError } = useUser();
   useEffect(() => {
     const validateToken = async () => {
       if (user && user?._id) {
         try {
-          const res = await axios.get("https://resumaster-backind.onrender.com/auth/verify", {
-            withCredentials: true,
-          });
+          const res = await axios.get(
+            "https://resumaster-backind.onrender.com/auth/verify",
+            {
+              withCredentials: true,
+            }
+          );
           setIsValid(true);
         } catch (error) {
           toast.error(error.response?.data?.message || "Authentication failed");
@@ -33,9 +36,14 @@ const PublicRoute = ({ children }) => {
 
     validateToken();
   }, [cookies.Token, user]);
+
   if (isValid === null) {
     return <Spinner />;
   }
+  if (isLoading) {
+    return <Spinner />;
+  }
+  if (isError) toast.error(isError);
   if (isValid) {
     return <Navigate to="/home" replace />;
   }
