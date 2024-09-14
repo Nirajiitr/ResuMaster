@@ -1,40 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
 import brandLogo from "../assets/logo.svg";
 
 import { useNavigate } from "react-router-dom";
 
-import toast from "react-hot-toast"
-import axios from "axios"
+import toast from "react-hot-toast";
+import axios from "axios";
 import AuthenticationProvider from "../components/AuthenticationProvider";
+import useUser from "../hooks/useUser";
+import Spinner from "../components/Spinner";
 const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
-  const [userData, setUserData] = useState({firstname: "", lastname: "", email: "", password:"", confirmPass: "", gender:""});
-   const navigate = useNavigate()
-   const handleSubmit = async (e)=>{
-    e.preventDefault();
-     
-       const endPoint = login? "login" : "register";
-    try {
-       const res = await axios.post(`https://resumaster-backind.onrender.com/auth/${endPoint}` , userData, {
-        headers: {
-          "Content-Type" : "application/json"
-        },
-        withCredentials : true
-       })
-       localStorage.setItem("user",JSON.stringify(res.data.newUser))
-       
-       navigate("/home")
+  const [userData, setUserData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    confirmPass: "",
+    gender: "",
+  });
+  const navigate = useNavigate();
+  const { data, isLoading } = useUser();
 
-       toast.success(res.data.message)
-      
-    } catch (error) {
-         toast.error(error.response.data.message)
-      navigate("/")
+  useEffect(() => {
+    if (!isLoading && data) {
+      navigate("/", { replace: true });
     }
-   
-    setUserData({firstname: "", lastname: "", email: "", password:"", confirmPass: "", gender:""})
-   }
-  
+  }, [isLoading, data]);
+  if (isLoading) {
+    <Spinner />;
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const endPoint = login ? "login" : "register";
+    try {
+      const res = await axios.post(
+        `http://localhost:8888/auth/${endPoint}`,
+        userData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      localStorage.setItem("user", JSON.stringify(res.data.newUser));
+
+      navigate("/home");
+
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      navigate("/");
+    }
+
+    setUserData({
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      confirmPass: "",
+      gender: "",
+    });
+  };
+
   return (
     <div className="fixed inset-0 bg-slate-700 bg-opacity-80 flex justify-center items-center">
       <div className="bg-blue-300 text-black w-[600px] h-[600px] rounded-xl">
@@ -71,7 +100,9 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
                   name="firstname"
                   required
                   value={userData.firstname}
-                  onChange={(e)=>setUserData({...userData, firstname: e.target.value})}
+                  onChange={(e) =>
+                    setUserData({ ...userData, firstname: e.target.value })
+                  }
                 />
                 <input
                   className="rounded-3xl focus:outline-none p-3"
@@ -80,7 +111,9 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
                   name="lastname"
                   required
                   value={userData.lastname}
-                  onChange={(e)=>setUserData({...userData, lastname: e.target.value})}
+                  onChange={(e) =>
+                    setUserData({ ...userData, lastname: e.target.value })
+                  }
                 />
               </>
             )}
@@ -92,7 +125,9 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
               name="email"
               required
               value={userData.email}
-              onChange={(e)=>setUserData({...userData, email: e.target.value})}
+              onChange={(e) =>
+                setUserData({ ...userData, email: e.target.value })
+              }
             />
 
             <input
@@ -102,7 +137,9 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
               name="password"
               required
               value={userData.password}
-              onChange={(e)=>setUserData({...userData, password: e.target.value})}
+              onChange={(e) =>
+                setUserData({ ...userData, password: e.target.value })
+              }
             />
             {!login && (
               <>
@@ -113,7 +150,9 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
                   name="confirmPass"
                   required
                   value={userData.confirmPass}
-                  onChange={(e)=>setUserData({...userData, confirmPass: e.target.value})}
+                  onChange={(e) =>
+                    setUserData({ ...userData, confirmPass: e.target.value })
+                  }
                 />
 
                 <fieldset className="border-blue-100 border-2 flex justify-center rounded-lg  gap-3 ">
@@ -124,9 +163,15 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
                     htmlFor="male"
                   >
                     male
-                    <input type="radio" id="male" name="gender" value="male"  checked={userData.gender==="male"}
-                     onChange={(e)=>setUserData({...userData, gender: e.target.value})}
-                  
+                    <input
+                      type="radio"
+                      id="male"
+                      name="gender"
+                      value="male"
+                      checked={userData.gender === "male"}
+                      onChange={(e) =>
+                        setUserData({ ...userData, gender: e.target.value })
+                      }
                     />
                   </label>
                   <label
@@ -139,8 +184,10 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
                       id="female"
                       name="gender"
                       value="female"
-                      checked={userData.gender==="female"}
-                      onChange={(e)=>setUserData({...userData, gender: e.target.value})}
+                      checked={userData.gender === "female"}
+                      onChange={(e) =>
+                        setUserData({ ...userData, gender: e.target.value })
+                      }
                     />
                   </label>
                   <label
@@ -153,8 +200,10 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
                       id="other"
                       name="gender"
                       value="other"
-                      checked={userData.gender==="other"}
-                      onChange={(e)=>setUserData({...userData, gender: e.target.value})}
+                      checked={userData.gender === "other"}
+                      onChange={(e) =>
+                        setUserData({ ...userData, gender: e.target.value })
+                      }
                     />
                   </label>
                 </fieldset>
@@ -175,7 +224,7 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
           <hr className="w-[50%]" />
         </div>
         <div className="flex flex-col items-center justify-center gap-2 p-5">
-           <AuthenticationProvider login ={login}  />
+          <AuthenticationProvider login={login} />
         </div>
       </div>
     </div>

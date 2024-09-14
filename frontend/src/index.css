@@ -41,3 +41,13 @@ body{
 }
   
 }
+@layer utilities{
+  .profile-style:hover {
+     scale: 1.2;
+     transition-duration: 1s;
+     cursor: pointer;
+  }
+   .profile-animation {
+
+   }
+}

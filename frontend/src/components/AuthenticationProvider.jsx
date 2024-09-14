@@ -6,42 +6,53 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
- 
 } from "firebase/auth";
 import { auth } from "../utils/firebase.confi";
 import toast from "react-hot-toast";
 const AuthenticationProvider = ({ login }) => {
   const githubAuthProvider = new GithubAuthProvider();
   const googleAuthProvider = new GoogleAuthProvider();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleClick = async (provider) => {
     switch (provider) {
       case "Google":
         await signInWithPopup(auth, googleAuthProvider)
           .then((result) => {
-           
-            localStorage.setItem("user",JSON.stringify({Fullname : result.user.displayName, email : result.user.email,uid: result.user.uid, profile: result.user.photoURL}));
-            
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                Fullname: result.user.displayName,
+                email: result.user.email,
+                profile: result.user.photoURL,
+              })
+            );
+
             navigate("/home");
 
             toast.success(result.operationType);
           })
           .catch((error) => {
-            toast.error("sever error")
-            navigate("/")
+            toast.error("sever error");
+            navigate("/");
           });
         break;
       case "Github":
         await signInWithPopup(auth, githubAuthProvider)
           .then((result) => {
-          
-            localStorage.setItem("user",JSON.stringify({Fullname : result.user.displayName, email : result.user.email,uid: result.user.uid, profile: result.user.photoURL}));
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                Fullname: result.user.displayName,
+                email: result.user.email,
+                profile: result.user.photoURL,
+              })
+            );
             navigate("/home");
             toast.success(result.operationType);
           })
           .catch((error) => {
-            toast.error("sever error")
-            navigate("/")
+            toast.error("sever error");
+            navigate("/");
           });
 
         break;
