@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser())
 const corsOption ={
-    origin: "https://resumaster.onrender.com",
+    origin: process.env.FRONTEND_BASE_URL,
     credentials : true,
 }
 app.use(cors(corsOption));

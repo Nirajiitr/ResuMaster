@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DefaultPage from "./pages/DefaultPage";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";

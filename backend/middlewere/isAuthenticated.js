@@ -3,7 +3,10 @@
  import "dotenv/config"
  const isAuthenticated = (req, res, next)=>{
  try {
-     const Token = req.cookies?.Token;
+    
+     const authHeader  = req.headers.authorization
+     const Token = authHeader ? authHeader.split(" ")[1] : null
+    
      if(!Token){
         return res.status(401).json({message: "user not authenticated"});
      }
@@ -18,7 +21,7 @@
              }
             
          }
-         req.id = decode.UserId;
+         req.id = decode.userId;
          next()
       } ); 
  } catch (error) {

@@ -1,6 +1,13 @@
 import { User } from "../models/authModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+
+const generateToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRETE_KEY, {
+    expiresIn: "5d",
+  });
+};
+
 export const register = async (req, res) => {
   const { firstname, lastname, email, password, confirmPass, gender } =
     req.body;
@@ -27,7 +34,7 @@ export const register = async (req, res) => {
     }
     const salt = 10;
     const hashPassword = bcrypt.hashSync(password, salt);
-    const newUser = User({
+    const newUser = new User({
       firstname,
       lastname,
       email,
@@ -35,7 +42,8 @@ export const register = async (req, res) => {
       gender,
     });
     await newUser.save();
-    res.status(201).json({ newUser, message: "account created successfully"});
+    const Token = generateToken(newUser._id)
+    res.status(201).json({ Token, newUser, message: "account created successfully" });
   } catch (error) {
     res.status(501).json({ message: "server error", error: error });
   }
@@ -53,38 +61,27 @@ export const login = async (req, res) => {
 
     if (!isPasswordMatch)
       return res.status(401).json({ message: "worng password!" });
-    const TokenData = {
-      UserId: newUser._id,
-    };
+    
 
-    const Token = jwt.sign(TokenData, process.env.JWT_SECRETE_KEY, {
-      expiresIn: "1d",
-    });
+    const Token = generateToken(newUser._id)
 
     res
       .status(200)
-      .cookie("Token", Token, {
-        MaxAge: 1 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        sameSite: "strict",
-      })
-      .json({newUser,message: "logged in successfully"});
+      
+      .json({ Token ,newUser, message: "logged in successfully" });
   } catch (error) {
     res.status(501).json({ message: "server error", error });
   }
 };
- export const getUser = async(req, res)=>{
-     const userId = req.id;
-     try{
-     const user = await User.findById(userId).select("-password");
-     if (!user) {
+export const getUser = async (req, res) => {
+  const userId = req.id;
+  try {
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-  res.status(200).json({ user });
-  }catch(error) {
-   
-    res.status(500).json({ message: "Server error"});
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
-
- }
- 
+};

@@ -37,7 +37,7 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
     try {
       setLoading(true)
       const res = await axios.post(
-        `https://resumaster-backind.onrender.com/auth/${endPoint}`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/auth/${endPoint}`,
         userData,
         {
           headers: {
@@ -47,12 +47,14 @@ const AuthPage = ({ showSignupModel, showLoginModel, login }) => {
         }
       );
       queryClient.invalidateQueries("user");
+      localStorage.setItem("Token", JSON.stringify(res.data.Token))
       setLoading(false)
       toast.success(res.data.message);
       navigate("/home"); 
     } catch (error) {
       setLoading(false)
-      toast.error(error.response.data.message);
+      console.log(error)
+      toast.error(error?.response?.data?.message || "Authentication Failed");
       navigate("/");
     }
 

@@ -20,6 +20,7 @@ const Navbar = ({ location, signupModel, showLoginModel }) => {
    const handleLogout = async()=>{
     await auth.signOut().then(()=>{
       queryClient.setQueryData("user", null)
+      localStorage.removeItem("Token")
     })
     navigate("/")
    }
