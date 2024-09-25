@@ -12,10 +12,7 @@ const useUser = () => {
        
         return userDetail;
       } catch (error) {
-        if (!error.message.includes("not authenticated")) {
-          toast.error("something went wrong...");
-        }
-       
+        console.error(error) 
       }
     },
     { refetchOnWindowFocus: false,

@@ -5,11 +5,23 @@ import resumeSample2 from "../assets/resume-sample-2.webp";
 import resumeSample3 from "../assets/resume-sample-3.webp";
 import { useState } from "react";
 import AuthPage from "./AuthPage";
+import useUser from "../hooks/useUser";
+import Spinner from "../components/Spinner";
 
 const DefaultPage = () => {
   const resumeSample = [resumeSample1, resumeSample2, resumeSample3];
   const [signupModel, setSignupModel] = useState(false);
   const [loginModel, setLoginModel] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true); 
+  const { isLoading } = useUser();
+
+  const handleImageLoad = () => {
+    setIsImageLoading(false);
+  };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="flex flex-col h-screen bg-slate-500 relative overflow-y-auto no-scrollbar">
@@ -18,15 +30,18 @@ const DefaultPage = () => {
         signupModel={setSignupModel}
         showLoginModel={setLoginModel}
       />
-      <div className=" flex ">
-        <div className="bg-gray-700 text-white w-[40%] hover:rounded-xl ">
-          <div className="flex items-start gap-1 overflow-hidden  hover:scale-95 hover:rounded-xl transition-transform duration-100   w-full ">
+      <div className="flex">
+        <div className="bg-gray-700 text-white w-[40%] hover:rounded-xl">
+          <div className="flex items-start gap-1 overflow-hidden hover:scale-95 hover:rounded-xl transition-transform duration-100 w-full">
+            {isImageLoading && <Spinner />}
             {resumeSample.map((img_url, index) => (
               <img
+                loading="lazy"
                 key={index}
-                className={`  h-full animate-swipe rounded-md`}
+                className="w-full h-full animate-swipe rounded-md"
                 src={img_url}
                 alt="sample resume"
+                onLoad={handleImageLoad} 
               />
             ))}
           </div>
@@ -53,7 +68,7 @@ const DefaultPage = () => {
               onClick={() => setSignupModel(true)}
               className="mt-20 ml-60 bg-green-500 p-5 px-10 rounded-lg hover:scale-105 transition-transform duration-500 hover:shadow-lg text-white text-xl font-mono"
             >
-              get start
+              Get Started
             </button>
           </div>
         </div>
