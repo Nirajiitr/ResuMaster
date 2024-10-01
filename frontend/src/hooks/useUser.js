@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 import { getUserData } from "../api";
 import { useEffect } from "react";

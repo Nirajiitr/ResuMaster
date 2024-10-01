@@ -28,7 +28,7 @@ const Navbar = ({ location, signupModel, showLoginModel }) => {
     return <Spinner />
    }
   return (
-    <nav className="w-full h-16 bg-blue-300 ">
+    <nav className="w-full h-16 bg-blue-300 px-12 ">
       <div className="flex justify-between items-center p-2">
         <img className="size-12 object-cover" src={logo} alt="brand logo" />
         <div className="flex items-center gap-7 relative ">

@@ -4,8 +4,8 @@ import { FaLinkedin } from "react-icons/fa";
 import logo from "../assets/logo.svg";
 const Footer = () => {
   return (
-    <footer className="w-full max-h-80 bg-[#7FA1C3]  py-2 ">
-      <div className="flex items-start justify-around gap-5">
+    <footer className="w-full max-h-80 bg-[#7FA1C3]  py-2 px-12">
+      <div className="flex items-start justify-between gap-5">
         <div className=" flex flex-col gap-2">
           <h1>CopyRight &copy; {new Date().getFullYear()}</h1>
           <img className="size-20" src={logo} alt="brand logo" />
